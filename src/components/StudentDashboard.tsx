@@ -114,7 +114,7 @@ export function StudentDashboard() {
                 </Button>
                 <Button variant="outline" className="flex-col h-auto py-4 gap-2">
                   <BookOpen className="w-5 h-5" />
-                  <span className="text-sm">Verificar Avisos</span>
+                  <span className="text-sm">Verificar Disciplinas</span>
                 </Button>
                 </div>
             </CardContent>
