@@ -15,25 +15,13 @@ import {
   MessageSquare,
   TrendingUp,
   Award,
-  Users
+  Users,
+  BookType
 } from 'lucide-react';
 import { useState } from 'react';
 
 export function StudentDashboard() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-
-  const assignments = [
-    { id: 1, title: 'Redação sobre Meio Ambiente', subject: 'Português', dueDate: '2025-11-08', status: 'pending', progress: 60 },
-    { id: 2, title: 'Exercícios de Álgebra Linear', subject: 'Matemática', dueDate: '2025-11-06', status: 'pending', progress: 30 },
-    { id: 3, title: 'Pesquisa sobre Revolução Industrial', subject: 'História', dueDate: '2025-11-10', status: 'pending', progress: 0 },
-    { id: 4, title: 'Relatório de Laboratório', subject: 'Química', dueDate: '2025-11-05', status: 'urgent', progress: 80 },
-  ];
-
-  const announcements = [
-    { id: 1, title: 'Reunião de Pais - 15/11', author: 'Direção', date: '2025-11-02', category: 'Importante' },
-    { id: 2, title: 'Olimpíada de Matemática - Inscrições Abertas', author: 'Prof. Silva', date: '2025-11-01', category: 'Evento' },
-    { id: 3, title: 'Biblioteca: Novos Livros Disponíveis', author: 'Biblioteca', date: '2025-10-30', category: 'Notícia' },
-  ];
 
   const grades = [
     { subject: 'Matemática', grade: 8.5, progress: 85 },
@@ -42,11 +30,6 @@ export function StudentDashboard() {
     { subject: 'Química', grade: 8.0, progress: 80 },
   ];
 
-  const discussions = [
-    { id: 1, title: 'Dúvidas sobre Equações do 2º Grau', subject: 'Matemática', replies: 12, lastActivity: '2h atrás' },
-    { id: 2, title: 'Análise do livro "Dom Casmurro"', subject: 'Literatura', replies: 8, lastActivity: '5h atrás' },
-    { id: 3, title: 'Projeto de Ciências - Sugestões', subject: 'Ciências', replies: 15, lastActivity: '1d atrás' },
-  ];
 
   return (
     <div className="space-y-6">
@@ -69,7 +52,7 @@ export function StudentDashboard() {
                 <CheckCircle2 className="w-8 h-8" />
                 <div>
                   <p className="text-2xl">12</p>
-                  <p className="text-sm text-blue-100">Tarefas Concluídas</p>
+                  <p className="text-sm text-blue-100">Quantidade de notas</p>
                 </div>
               </div>
             </div>
@@ -84,10 +67,10 @@ export function StudentDashboard() {
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
               <div className="flex items-center gap-3">
-                <Award className="w-8 h-8" />
+                <BookType className="w-8 h-8" />
                 <div>
                   <p className="text-2xl">5</p>
-                  <p className="text-sm text-blue-100">Conquistas</p>
+                  <p className="text-sm text-blue-100">Disciplinas</p>
                 </div>
               </div>
             </div>
@@ -98,49 +81,6 @@ export function StudentDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Column */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Assignments */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="w-5 h-5" />
-                Tarefas Pendentes
-              </CardTitle>
-              <CardDescription>Organize seu tempo e complete suas atividades</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {assignments.map((assignment) => (
-                <div key={assignment.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1">
-                      <h3 className="text-gray-900">{assignment.title}</h3>
-                      <div className="flex items-center gap-3 mt-1">
-                        <Badge variant="outline">{assignment.subject}</Badge>
-                        <span className="text-sm text-gray-500 flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {assignment.dueDate}
-                        </span>
-                      </div>
-                    </div>
-                    {assignment.status === 'urgent' && (
-                      <Badge variant="destructive">Urgente</Badge>
-                    )}
-                  </div>
-                  <div className="mt-3">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm text-gray-600">Progresso</span>
-                      <span className="text-sm">{assignment.progress}%</span>
-                    </div>
-                    <Progress value={assignment.progress} />
-                  </div>
-                  <div className="mt-3 flex gap-2">
-                    <Button size="sm" variant="outline">Ver Detalhes</Button>
-                    <Button size="sm">Continuar</Button>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
           {/* Notas */}
           <Card>
             <CardHeader>
@@ -162,37 +102,25 @@ export function StudentDashboard() {
               ))}
             </CardContent>
           </Card>
-
-          {/* Fórum de Discussões */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="w-5 h-5" />
-                Fórum de Discussões
-              </CardTitle>
-              <CardDescription>Participe das conversas com colegas e professores</CardDescription>
+              <CardTitle>Ações Rápidas</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {discussions.map((discussion) => (
-                <div key={discussion.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-gray-900">{discussion.title}</h3>
-                      <div className="flex items-center gap-3 mt-2">
-                        <Badge variant="secondary">{discussion.subject}</Badge>
-                        <span className="text-sm text-gray-500 flex items-center gap-1">
-                          <Users className="w-3 h-3" />
-                          {discussion.replies} respostas
-                        </span>
-                        <span className="text-sm text-gray-500">{discussion.lastActivity}</span>
-                      </div>
-                    </div>
-                  </div>
+            <CardContent>
+              <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                <Button className="flex-col h-auto py-4 gap-2">
+                  <Award className="w-5 h-5" />
+                  <span className="text-sm">Verificar Notas</span>
+                </Button>
+                <Button variant="outline" className="flex-col h-auto py-4 gap-2">
+                  <BookOpen className="w-5 h-5" />
+                  <span className="text-sm">Verificar Avisos</span>
+                </Button>
                 </div>
-              ))}
-              <Button variant="outline" className="w-full">Ver Todas as Discussões</Button>
             </CardContent>
           </Card>
+
+          {/* Fórum de Discussões */}
         </div>
 
         {/* Sidebar */}
@@ -212,23 +140,6 @@ export function StudentDashboard() {
                 onSelect={setDate}
                 className="rounded-md border"
               />
-              <div className="mt-4 space-y-2">
-                <p className="text-sm text-gray-600">Próximos Eventos:</p>
-                <div className="text-sm space-y-2">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span>08/11 - Entrega de Redação</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>15/11 - Reunião de Pais</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    <span>20/11 - Feira de Ciências</span>
-                  </div>
-                </div>
-              </div>
             </CardContent>
           </Card>
 
@@ -240,18 +151,6 @@ export function StudentDashboard() {
                 Avisos e Notícias
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {announcements.map((announcement) => (
-                <div key={announcement.id} className="border-l-4 border-blue-500 pl-3 py-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <h4 className="text-sm text-gray-900">{announcement.title}</h4>
-                    <Badge variant="secondary" className="text-xs">{announcement.category}</Badge>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">Por {announcement.author} • {announcement.date}</p>
-                </div>
-              ))}
-              <Button variant="link" className="w-full p-0">Ver todos os avisos</Button>
-            </CardContent>
           </Card>
 
           {/* Resources */}
