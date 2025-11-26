@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useNavigate, Navigate } from "react-route
 
 import { TeacherDashboard } from "./components/TeacherDashboard";
 import { StudentDashboard } from "./components/StudentDashboard";
-import { Register } from "./components/Register";
+import Register from "./components/Register"
 import { Login } from "./components/Login";
 import { Button } from "./components/ui/button";
 import { BookOpen, LogOut } from "lucide-react";

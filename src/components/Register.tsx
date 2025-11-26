@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSpring, animated, SpringValue, to as springTo } from 'react-spring';
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { BookOpen, GraduationCap, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -17,6 +19,33 @@ export default function Register() {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // ANIMAÇÃO PRINCIPAL: pop-in quando a tela abre
+  const [springCard, apiCard] = useSpring(() => ({
+    from: { 
+      opacity: 0, 
+      scale: 0.8, 
+      y: 20 
+    },
+    to: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0 
+    },
+    config: { 
+      tension: 280,
+      friction: 25,
+      mass: 1
+    }
+  }));
+
+  // Dispara animação principal quando o componente monta
+  useEffect(() => {
+    apiCard.start({
+      from: { opacity: 0, scale: 0.8, y: 20 },
+      to: { opacity: 1, scale: 1, y: 0 }
+    });
+  }, [apiCard]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,69 +96,47 @@ export default function Register() {
       // sucesso
       
     } catch (err: any) {
-      setError(err?.message ?? "Erro ao criar conta");
+      window.alert("Usuário ou senha incorretos.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Estilo animado
+  const animatedStyleCard = {
+    opacity: springCard.opacity as SpringValue<number>,
+    transform: springCard.scale
+      ? springTo([springCard.scale, springCard.y], (s: number, y: number) => `translateY(${y}px) scale(${s})`)
+      : undefined,
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
+        {/* Header com animação */}
+        <animated.div 
+          style={animatedStyleCard}
+          className="text-center mb-8"
+        >
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
               <BookOpen className="w-7 h-7 text-white" />
             </div>
           </div>
-          <h1 className="text-gray-900 mb-2">Portal Escolar Colaborativo</h1>
+          <h1 className="text-gray-900 mb-2">GradeFlow</h1>
           <p className="text-gray-600">Conectando educadores e estudantes</p>
-        </div>
+        </animated.div>
 
-        <Card className="w-full max-w-md shadow-xl">
-          <CardHeader>
-            <CardTitle>Criar Conta</CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleRegister} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nome</Label>
-                <Input
-                  id="name"
-                  placeholder="Seu nome completo"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="email@escola.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password">Senha</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-
+        {/* Card com animação */}
+        <animated.div style={animatedStyleCard}>
+          <Card className="shadow-xl">
+            <CardHeader>
+              <CardTitle>Registrar cadastro</CardTitle>
+              <CardDescription>Escolha seu tipo de acesso</CardDescription>
+            </CardHeader>
+            <CardContent>
               {/* Seleção de tipo de usuário melhorada */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-6">
                 <Label>Você é</Label>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -183,20 +190,61 @@ export default function Register() {
                 <p className="text-xs text-gray-500 text-center">Escolha o perfil que melhor descreve você.</p>
               </div>
 
-              {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">{error}</div>
-              )}
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Nome</Label>
+                  <Input
+                    id="name"
+                    placeholder="Seu nome completo"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Registrando..." : "Criar Conta"}
-              </Button>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="email@escola.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
 
-              <Button type="button" variant="ghost" className="w-full mt-2" onClick={() => navigate("/login")}>
-                Já tem uma conta? Fazer Login
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Senha</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {error && (
+                  <div className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">{error}</div>
+                )}
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Registrando..." : "Criar Conta"}
+                </Button>
+              </form>
+
+              {/* Footer padronizado com o Login */}
+              <div className="mt-6 text-center text-sm text-gray-600">
+                Já tem uma conta?{' '}
+                <Link to="/login" className="text-blue-600 hover:underline">
+                  Fazer Login
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </animated.div>
       </div>
     </div>
   );
