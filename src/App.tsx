@@ -4,7 +4,9 @@ import { BrowserRouter, Routes, Route, useNavigate, Navigate } from "react-route
 import { TeacherDashboard } from "./components/TeacherDashboard";
 import { StudentDashboard } from "./components/StudentDashboard";
 import Register from "./components/Register"
-import { Login } from "./components/Login";
+import { Login } from "./components/Login"
+import RegisterSubject from "./components/RegisterSubject"
+import RegisterGrade from "./components/RegisterGrade"
 import { Button } from "./components/ui/button";
 import { BookOpen, LogOut } from "lucide-react";
 
@@ -106,6 +108,11 @@ function AppRoutes() {
       />
 
       <Route path="/register" element={<Register />} />
+
+      <Route path="/register-subject" element={<RegisterSubject />} />
+      <Route path="/register-grade" element={<RegisterGrade />} />
+
+
 
       {/* raiz e qualquer outra rota -> redireciona para login */}
       <Route path="/" element={<Navigate to="/login" replace />} />

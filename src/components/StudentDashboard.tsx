@@ -108,7 +108,7 @@ export function StudentDashboard() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                <Button className="flex-col h-auto py-4 gap-2">
+                <Button variant="outline" className="flex-col h-auto py-4 gap-2">
                   <Award className="w-5 h-5" />
                   <span className="text-sm">Verificar Notas</span>
                 </Button>
@@ -138,71 +138,8 @@ export function StudentDashboard() {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
-                className="rounded-md border"
+                className=" w-fit mx-auto"
               />
-            </CardContent>
-          </Card>
-
-          {/* Announcements */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5" />
-                Avisos e Notícias
-              </CardTitle>
-            </CardHeader>
-          </Card>
-
-          {/* Resources */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Recursos Compartilhados</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Matemática</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-2">
-                      <Button variant="ghost" className="w-full justify-start text-sm">
-                        📄 Fórmulas de Geometria
-                      </Button>
-                      <Button variant="ghost" className="w-full justify-start text-sm">
-                        📊 Exercícios Resolvidos
-                      </Button>
-                      <Button variant="ghost" className="w-full justify-start text-sm">
-                        🎥 Vídeo-aulas
-                      </Button>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-2">
-                  <AccordionTrigger>Português</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-2">
-                      <Button variant="ghost" className="w-full justify-start text-sm">
-                        📚 Obras Literárias
-                      </Button>
-                      <Button variant="ghost" className="w-full justify-start text-sm">
-                        ✍️ Guia de Redação
-                      </Button>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-3">
-                  <AccordionTrigger>História</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-2">
-                      <Button variant="ghost" className="w-full justify-start text-sm">
-                        🗺️ Linhas do Tempo
-                      </Button>
-                      <Button variant="ghost" className="w-full justify-start text-sm">
-                        📖 Documentários
-                      </Button>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
             </CardContent>
           </Card>
         </div>

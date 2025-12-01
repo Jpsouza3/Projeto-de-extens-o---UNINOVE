@@ -6,8 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
+import { Calendar } from './ui/calendar';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useNavigate } from "react-router-dom";
 import { 
   BookOpen, 
   Users, 
@@ -29,9 +32,8 @@ export function TeacherDashboard() {
   const [newAnnouncementContent, setNewAnnouncementContent] = useState('');
 
   const classes = [
-    { id: 1, name: '9º Ano A', students: 32, subject: 'Matemática', nextClass: 'Hoje, 14:00' },
-    { id: 2, name: '8º Ano B', students: 28, subject: 'Matemática', nextClass: 'Amanhã, 10:00' },
-    { id: 3, name: '9º Ano C', students: 30, subject: 'Matemática', nextClass: 'Qua, 15:00' },
+    { id: 1, name: 'Matemática', students: 32, subject: 'Matemática', nextClass: 'Hoje, 14:00' },
+
   ];
 
   const pendingGrades = [
@@ -53,10 +55,12 @@ export function TeacherDashboard() {
   ];
 
   const classPerformance = [
-    { class: '9º Ano A', average: 7.8, attendance: 92 },
-    { class: '8º Ano B', average: 8.2, attendance: 95 },
-    { class: '9º Ano C', average: 7.5, attendance: 88 },
+    { class: 'Matemática', average: 7.8},
   ];
+
+  const navigate = useNavigate();
+
+    const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
     <div className="space-y-6">
@@ -73,13 +77,13 @@ export function TeacherDashboard() {
               <p className="text-purple-100">Gerencie suas turmas e atividades</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
               <div className="flex items-center gap-3">
                 <Users className="w-8 h-8" />
                 <div>
-                  <p className="text-2xl">3</p>
-                  <p className="text-sm text-purple-100">Turmas Ativas</p>
+                  <p className="text-2xl">32</p>
+                  <p className="text-sm text-purple-100">Alunos</p>
                 </div>
               </div>
             </div>
@@ -88,7 +92,7 @@ export function TeacherDashboard() {
                 <FileText className="w-8 h-8" />
                 <div>
                   <p className="text-2xl">12</p>
-                  <p className="text-sm text-purple-100">Atividades Criadas</p>
+                  <p className="text-sm text-purple-100">Notas inseridas</p>
                 </div>
               </div>
             </div>
@@ -96,17 +100,8 @@ export function TeacherDashboard() {
               <div className="flex items-center gap-3">
                 <CheckCircle className="w-8 h-8" />
                 <div>
-                  <p className="text-2xl">82</p>
-                  <p className="text-sm text-purple-100">Para Corrigir</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <div className="flex items-center gap-3">
-                <MessageSquare className="w-8 h-8" />
-                <div>
-                  <p className="text-2xl">5</p>
-                  <p className="text-sm text-purple-100">Mensagens Novas</p>
+                  <p className="text-2xl">8</p>
+                  <p className="text-sm text-purple-100">Disciplinas</p>
                 </div>
               </div>
             </div>
@@ -123,62 +118,19 @@ export function TeacherDashboard() {
               <CardTitle>Ações Rápidas</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <Button className="flex-col h-auto py-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                <Button className="flex-col h-auto py-4 gap-2"
+                onClick={() => navigate("/register-grade")}>
                   <PlusCircle className="w-5 h-5" />
-                  <span className="text-sm">Nova Atividade</span>
+                  <span className="text-sm">Registrar nota</span>
                 </Button>
-                <Button variant="outline" className="flex-col h-auto py-4 gap-2">
+                <Button variant="outline" className="flex-col h-auto py-4 gap-2"
+                 onClick={() => navigate("/register-subject")}>
                   <Upload className="w-5 h-5" />
-                  <span className="text-sm">Upload Material</span>
+                  <span className="text-sm">Registrar Disciplina</span>
                 </Button>
-                <Button variant="outline" className="flex-col h-auto py-4 gap-2">
-                  <Bell className="w-5 h-5" />
-                  <span className="text-sm">Criar Aviso</span>
-                </Button>
-                <Button variant="outline" className="flex-col h-auto py-4 gap-2">
-                  <BarChart3 className="w-5 h-5" />
-                  <span className="text-sm">Relatórios</span>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Minhas Turmas */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                Minhas Turmas
-              </CardTitle>
-              <CardDescription>Gerencie e acompanhe suas turmas</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {classes.map((classItem) => (
-                <div key={classItem.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-gray-900">{classItem.name}</h3>
-                      <div className="flex items-center gap-3 mt-2">
-                        <Badge variant="outline">{classItem.subject}</Badge>
-                        <span className="text-sm text-gray-500 flex items-center gap-1">
-                          <Users className="w-3 h-3" />
-                          {classItem.students} alunos
-                        </span>
-                        <span className="text-sm text-gray-500 flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {classItem.nextClass}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex gap-2">
-                    <Button size="sm" variant="outline">Ver Turma</Button>
-                    <Button size="sm" variant="outline">Diário de Classe</Button>
-                    <Button size="sm">Acessar</Button>
-                  </div>
-                </div>
-              ))}
+              </div>
             </CardContent>
           </Card>
 
@@ -187,9 +139,9 @@ export function TeacherDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="w-5 h-5" />
-                Desempenho das Turmas
+                Desempenho dos alunos
               </CardTitle>
-              <CardDescription>Média e frequência por turma</CardDescription>
+              <CardDescription>Média</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {classPerformance.map((item) => (
@@ -203,12 +155,6 @@ export function TeacherDashboard() {
                           {item.average}
                         </p>
                       </div>
-                      <div className="text-center">
-                        <p className="text-sm text-gray-500">Frequência</p>
-                        <p className={`${item.attendance >= 90 ? 'text-green-600' : 'text-yellow-600'}`}>
-                          {item.attendance}%
-                        </p>
-                      </div>
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -220,173 +166,25 @@ export function TeacherDashboard() {
             </CardContent>
           </Card>
 
-          {/* Create Announcement */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5" />
-                Criar Novo Aviso
-              </CardTitle>
-              <CardDescription>Compartilhe informações importantes com seus alunos</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Título do Aviso</Label>
-                  <Input 
-                    id="title" 
-                    placeholder="Ex: Reunião de pais marcada" 
-                    value={newAnnouncementTitle}
-                    onChange={(e) => setNewAnnouncementTitle(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="content">Conteúdo</Label>
-                  <Textarea 
-                    id="content" 
-                    placeholder="Descreva os detalhes do aviso..."
-                    rows={4}
-                    value={newAnnouncementContent}
-                    onChange={(e) => setNewAnnouncementContent(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="class">Destinatários</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione a turma" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas as turmas</SelectItem>
-                      <SelectItem value="9a">9º Ano A</SelectItem>
-                      <SelectItem value="8b">8º Ano B</SelectItem>
-                      <SelectItem value="9c">9º Ano C</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex gap-2">
-                  <Button className="flex-1">Publicar Aviso</Button>
-                  <Button variant="outline">Salvar Rascunho</Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Pending Grades */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="w-5 h-5" />
-                Pendências
-              </CardTitle>
-              <CardDescription>Atividades para corrigir</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {pendingGrades.map((item) => (
-                <div key={item.id} className="border rounded-lg p-3 hover:bg-gray-50 transition-colors">
-                  <h4 className="text-sm text-gray-900">{item.assignment}</h4>
-                  <p className="text-xs text-gray-500 mt-1">{item.class}</p>
-                  <div className="mt-2 flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
-                      {item.submitted}/{item.total} enviados
-                    </span>
-                    <Badge variant={item.submitted === item.total ? 'default' : 'secondary'}>
-                      {Math.round((item.submitted / item.total) * 100)}%
-                    </Badge>
-                  </div>
-                  <Button size="sm" variant="outline" className="w-full mt-2">
-                    Corrigir Agora
-                  </Button>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Recent Discussions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="w-5 h-5" />
-                Mensagens Recentes
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {recentDiscussions.map((discussion) => (
-                <div key={discussion.id} className="border-l-4 border-blue-500 pl-3 py-2 hover:bg-gray-50 transition-colors cursor-pointer">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-sm text-gray-900">{discussion.student}</h4>
-                        {discussion.unread && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        )}
-                      </div>
-                      <p className="text-xs text-gray-600 mt-1">{discussion.topic}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs">{discussion.class}</Badge>
-                        <span className="text-xs text-gray-500">{discussion.time}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              <Button variant="link" className="w-full p-0">Ver todas as mensagens</Button>
-            </CardContent>
-          </Card>
-
-          {/* Upcoming Events */}
+          {/* Calendar */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5" />
-                Próximos Eventos
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {upcomingEvents.map((event) => (
-                <div key={event.id} className="border rounded-lg p-3">
-                  <h4 className="text-sm text-gray-900">{event.title}</h4>
-                  <div className="flex items-center gap-2 mt-2">
-                    <CalendarIcon className="w-3 h-3 text-gray-500" />
-                    <span className="text-xs text-gray-600">{event.date}</span>
-                    <Clock className="w-3 h-3 text-gray-500 ml-2" />
-                    <span className="text-xs text-gray-600">{event.time}</span>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Resources */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5" />
-                Biblioteca de Recursos
+                Calendário
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                <Button variant="ghost" className="w-full justify-start">
-                  📚 Planos de Aula
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  📊 Modelos de Provas
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  🎥 Vídeos Educacionais
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  📝 Exercícios Extras
-                </Button>
-                <Button variant="outline" className="w-full mt-4">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Adicionar Recurso
-                </Button>
-              </div>
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                className=" w-fit mx-auto"
+              />
             </CardContent>
           </Card>
         </div>
