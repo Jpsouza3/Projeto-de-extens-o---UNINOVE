@@ -1,39 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useSpring, animated, SpringValue, to as springTo } from 'react-spring';
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent, CardHeader, CardDescription, CardTitle } from './ui/card';
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { BookOpen, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export default function RegisterSubject() {
   const navigate = useNavigate();
 
   // campo do formulário
   const [name, setName] = useState("");
-
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   // ANIMAÇÃO PRINCIPAL: pop-in quando a tela abre
   const [springCard, apiCard] = useSpring(() => ({
-    from: { 
-      opacity: 0, 
-      scale: 0.8, 
-      y: 20 
-    },
-    to: { 
-      opacity: 1, 
-      scale: 1, 
-      y: 0 
-    },
-    config: { 
-      tension: 280,
-      friction: 25,
-      mass: 1
-    }
+    from: { opacity: 0, scale: 0.8, y: 20 },
+    to: { opacity: 1, scale: 1, y: 0 },
+    config: { tension: 280, friction: 25, mass: 1 }
   }));
 
   useEffect(() => {
@@ -53,17 +39,28 @@ export default function RegisterSubject() {
     setLoading(true);
 
     try {
-      const endpoint = `http://localhost:5293/api/subject/create`;
+      const endpoint = `http://localhost:5293/api/course/create`;
 
       const payload = {
         name: name.trim(),
       };
+
+      // pegar token do localStorage
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("Usuário não autenticado. Faça login novamente.");
+        setLoading(false);
+        return;
+      }
 
       const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           Accept: "*/*",
           "Content-Type": "application/json",
+          // header de autorização com Bearer token
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -85,7 +82,7 @@ export default function RegisterSubject() {
       navigate("/teacher");
 
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Erro desconhecido");
     } finally {
       setLoading(false);
     }

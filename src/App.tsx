@@ -73,7 +73,7 @@ function AppRoutes() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    // opcional: limpar token do localStorage se estiver usando
+    localStorage.clear()
     // localStorage.removeItem("token");
     navigate("/login");
   };
@@ -89,7 +89,7 @@ function AppRoutes() {
         element={
           <ProtectedRoute isAllowed={isLoggedIn}>
             <DashboardLayout userType="student" onLogout={handleLogout}>
-              <StudentDashboard />
+              <StudentDashboard/>
             </DashboardLayout>
           </ProtectedRoute>
         }

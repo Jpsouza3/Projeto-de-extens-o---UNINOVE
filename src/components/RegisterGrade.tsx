@@ -109,13 +109,15 @@ export default function RegisterGrade() {
 
     setLoading(true);
 
+          const token = localStorage.getItem("token");
+
     try {
       const endpoint = `http://localhost:5293/api/grade/create`;
 
       const payload = {
         courseId: selectedCourseId,
         studentId: selectedStudentId,
-        grade: gradeValue,
+        gradePoint: gradeValue,
       };
 
       const res = await fetch(endpoint, {
@@ -123,6 +125,7 @@ export default function RegisterGrade() {
         headers: {
           Accept: "*/*",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
